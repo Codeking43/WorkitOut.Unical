@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Just-pass Admin Panel</title>
+    <link rel="shortcut icon" href="./main.jfif" type="image/x-icon">
+    <!-- React and ReactDOM -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <!-- Babel for JSX support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.21.0/babel.min.js"></script>
+    <!-- Firebase Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .admin-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1.2rem;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        ul {
+            margin-top: 20px;
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyAicjO4bsXnfdF4l6sCmFvoRliiV6EC62I",
+        authDomain: "portfolioclient-7d2fa.firebaseapp.com",
+        databaseURL: "https://portfolioclient-7d2fa-default-rtdb.firebaseio.com",
+        projectId: "portfolioclient-7d2fa",
+        storageBucket: "portfolioclient-7d2fa.appspot.com",
+        messagingSenderId: "141801602453",
+        appId: "1:141801602453:web:91d3d6231987678dc78a9c"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    function Admin() {
+        const [newCoupon, setNewCoupon] = useState("");
+        const [coupons, setCoupons] = useState([]);
+
+        // Fetch available coupons from Firebase
+        useEffect(() => {
+            const couponsRef = firebase.database().ref("coupons");
+            couponsRef.on("value", snapshot => {
+                const data = snapshot.val();
+                if (data) {
+                    setCoupons(Object.keys(data));
+                } else {
+                    setCoupons([]);
+                }
+            });
+
+            // Cleanup listener on unmount
+            return () => couponsRef.off();
+        }, []);
+
+        // Add a new coupon
+        const addCoupon = () => {
+            if (!newCoupon) {
+                alert("Please enter a coupon code.");
+                return;
+            }
+
+            const couponRef = firebase.database().ref("coupons/" + newCoupon);
+            couponRef.set(true, error => {
+                if (error) {
+                    alert("Error adding coupon. Please try again.");
+                } else {
+                    alert("Coupon added successfully!");
+                    setNewCoupon("");
+                }
+            });
+        };
+
+        return (
+            <div className="admin-page">
+                <h1>Admin Panel</h1>
+                    <img src="./main.jfif"  />
+                <h2>Add a Coupon</h2>
+                <input
+                    type="text"
+                    value={newCoupon}
+                    onChange={e => setNewCoupon(e.target.value)}
+                    placeholder="Enter new coupon code"
+                />
+                <button onClick={addCoupon}>Add Coupon</button>
+
+                <h2>Available Coupons</h2>
+                {coupons.length > 0 ? (
+                    <ul>
+                        {coupons.map(coupon => (
+                            <li key={coupon}>{coupon}</li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No coupons available.</p>
+                )}
+            </div>
+        );
+    }
+
+    const root = document.getElementById("root");
+    ReactDOM.render(<Admin />, root);
+</script>
+</body>
+</html>

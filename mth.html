@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Just-Pass.unical</title>
+    <link rel="shortcut icon" href="./main.jfif" type="image/x-icon">
+    <style>
+             *{
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+                     }
+            html{
+                background-color: rgb(235, 238, 241);
+                background-image: linear-gradient(to right,rgb(243, 245, 247),rgba(204, 175, 175, 0.685));
+            }
+        img{
+                width: 300px;
+                height: 300px;
+            }
+            .icons {
+                display: flex;
+                flex-wrap: wrap;
+             
+            }
+            .icons img  {
+                border: 2px solid black;
+                flex-grow: 1;
+                flex-basis: 200;
+            }
+    </style>  
+</head>
+<body onload="setTimeout(msg,3000)">
+
+   <div class="icons">
+    <img src="./image/1.jpg" />
+    <img src="./image/1b.jpg" />
+    <img src="./image/2.jpg" />
+    <img src="./image/2b.jpg" />
+    <img src="./image/3.jpg" />
+    <img src="./image/3b.jpg" />
+    <img src="./image/4.jpg" />
+    <img src="./image/5.jpg" />
+    <img src="./image/5b.jpg" />
+    <img src="./image/6.jpg " />
+    <img src="./image/6b.jpg " />
+    <img src="./image/7.jpg" />
+    <img src="./image/8.jpg" />
+    <img src="./image/9.jpg" />
+    <img src="./image/10.jpg" />
+    <img src="./image/11.jpg" />
+    <img src="./image/12.jpg" />
+    <img src="./image/13.jpg" />
+    <img src="./image/14.jpg " />
+    <img src="./image/15.jpg" />
+
+   </div> 
+   <script>
+    const msg=()=>{
+        const msgShow=confirm("Do  you wish to get the pdf version ?");
+        if (msgShow) {
+                        window.print();
+                    } else {
+                        alert("Ok continues writing Online.");
+                    }
+    }
+   </script>
+</body>
+</html>
