@@ -95,21 +95,29 @@
         const [error, setError] = useState("");
         const [showModal, setShowModal] = useState(false);
 
-        useEffect(() => {
-            if (stage === "permission") {
-                if (navigator.vibrate) {
-                    const granted = confirm("This page is monitoring you. Do you wish to continue?");
-                    if (granted) {
-                        setStage("vibration");
-                    } else {
-                        alert("Permission denied. Reload the page to retry.");
-                        window.history.back();
-                    }
-                } else {
-                    alert("Your browser does not support vibration.");
-                }
+      useEffect(() => {
+    if (stage === "permission") {
+        // Check if vibration API is available
+        const isVibrationSupported = "vibrate" in navigator;
+
+        const granted = confirm(
+            isVibrationSupported 
+                ? "This page is monitoring you and may use vibration. Do you wish to continue?" 
+                : "This page is monitoring you. Vibration is not supported in your browser. Do you wish to continue?"
+        );
+
+        if (granted) {
+            setStage("vibration");
+            if (isVibrationSupported) {
+                navigator.vibrate(200); // Vibrate for 200ms if supported
             }
-        }, [stage]);
+        } else {
+            alert("Permission denied. Reload the page to retry.");
+            window.history.back();
+        }
+    }
+}, [stage]);
+
 useEffect(() => {
     if (stage === "vibration") {
         // Check if vibration is supported
